@@ -1,0 +1,24 @@
+{
+  "name": "amdox-erp",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,json,md,css}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md,css}\"",
+    "db:migrate": "pnpm --filter @amdox/database prisma migrate dev",
+    "db:reset": "pnpm --filter @amdox/database prisma migrate reset",
+    "db:seed": "pnpm --filter @amdox/database prisma db seed",
+    "db:studio": "pnpm --filter @amdox/database prisma studio"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.2",
+    "prisma": "6.19.3",
+    "turbo": "^2.4.4",
+    "typescript": "^5.7.3"
+  },
+  "packageManager": "pnpm@11.9.0"
+}

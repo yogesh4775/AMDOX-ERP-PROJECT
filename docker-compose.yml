@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: amdox-db
+    environment:
+      POSTGRES_DB: amdox_erp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: supersecretpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  cache:
+    image: redis:7-alpine
+    container_name: amdox-cache
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: amdox-backend
+    environment:
+      DATABASE_URL: postgresql://postgres:supersecretpassword@db:5432/amdox_erp
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
+      PORT: 8080
+      CORS_ORIGINS: http://localhost
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-development-access-secret-change-me}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-development-refresh-secret-change-me}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - cache
+
+  worker:
+    build:
+      context: .
+      dockerfile: apps/backend/Dockerfile
+    container_name: amdox-worker
+    environment:
+      DATABASE_URL: postgresql://postgres:supersecretpassword@db:5432/amdox_erp
+      REDIS_HOST: cache
+      REDIS_PORT: 6379
+    command: ["node", "apps/backend/dist/main"] # Simulation worker command start
+    depends_on:
+      - db
+      - cache
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: /api
+    container_name: amdox-frontend
+    environment:
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  proxy:
+    image: nginx:alpine
+    container_name: amdox-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+
+volumes:
+  pgdata:

@@ -1,0 +1,13 @@
+import { Module } from "@nestjs/common";
+import { OrganizationService } from "./organization.service";
+import { OrganizationController } from "./organization.controller";
+import { AuthModule } from "../auth/auth.module";
+import { TransactionHelper } from "../../common/transactions/transaction.helper";
+
+@Module({
+  imports: [AuthModule],
+  controllers: [OrganizationController],
+  providers: [OrganizationService, TransactionHelper],
+  exports: [OrganizationService],
+})
+export class OrganizationModule {}

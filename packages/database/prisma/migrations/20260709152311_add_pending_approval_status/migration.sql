@@ -1,0 +1,5 @@
+-- AlterEnum
+ALTER TYPE "ShipmentStatus" ADD VALUE 'PENDING_APPROVAL';
+
+-- AlterEnum
+ALTER TYPE "TripStatus" ADD VALUE 'PENDING_APPROVAL';

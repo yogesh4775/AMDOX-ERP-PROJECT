@@ -1,0 +1,30 @@
+{
+  "name": "@amdox/database",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma",
+    "prisma:format": "prisma format --schema=./prisma/schema.prisma",
+    "prisma:validate": "prisma validate --schema=./prisma/schema.prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "argon2": "^0.41.1"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/core": "^11.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "prisma": "6.19.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
+}
