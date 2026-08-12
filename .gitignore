@@ -9,6 +9,8 @@ build/
 out/
 .turbo/
 
+*.zip
+
 # Logs
 *.log
 npm-debug.log*
