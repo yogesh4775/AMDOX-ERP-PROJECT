@@ -82,6 +82,7 @@ export function AuthProvider({
       // No refresh token means there is no session to restore.
       if (!refreshToken) {
         if (!cancelled) {
+          clearAuth();
           setLoading(false);
         }
         return;
